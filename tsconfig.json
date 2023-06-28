@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "module": "commonjs",
+        "target": "ES2020",
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "inlineSourceMap": true,
+        "rootDirs": ["src", "tests"],
+        "baseUrl": "src",
+        "paths": {
+            "@/*": ["*"]
+        }
+    },
+    "include": ["src", "tests"],
+    "exclude": []
+}

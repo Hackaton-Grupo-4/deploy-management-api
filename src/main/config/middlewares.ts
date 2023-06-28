@@ -1,0 +1,9 @@
+import { bodyParser, contentType, cors, disconnect } from '@/main/middlewares'
+import { Express } from 'express'
+
+export default (app: Express): void => {
+  app.use(bodyParser)
+  app.use(cors)
+  app.use(contentType)
+  app.use(disconnect)
+}
