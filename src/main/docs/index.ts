@@ -13,7 +13,9 @@ export default {
     url: '/api'
   }],
   tags: [{
-    name: 'User'
+    name: 'User',
+  },{
+    name: 'History'
   }],
   paths,
   components,

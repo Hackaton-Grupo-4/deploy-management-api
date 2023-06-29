@@ -17,8 +17,7 @@ export class UserController implements Controller {
       const { name, role } = request
 
       const user = await this.addUser.add({
-        name,
-        role
+        name, role
       })
 
       return ok(user)
