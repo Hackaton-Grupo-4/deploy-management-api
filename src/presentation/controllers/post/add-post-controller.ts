@@ -40,7 +40,6 @@ export class AddPostController implements Controller {
 
       return created(post)
     } catch (error) {
-      console.log(error)
       return serverError(error)
     }
   }

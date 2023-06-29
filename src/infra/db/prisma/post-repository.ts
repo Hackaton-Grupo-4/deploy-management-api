@@ -1,8 +1,11 @@
-import { AddPostRepository } from '@/data/protocols/db'
+import { AddPostRepository, FindPostRepository } from '@/data/protocols/db'
+import { FindPost } from '@/domain/usecases'
 import { Context } from '@/infra/db/prisma/helpers/context'
 import { postFormatter } from '@/utils'
 
-export class PostRepository implements AddPostRepository {
+export class PostRepository implements
+  AddPostRepository,
+  FindPostRepository {
   constructor(
     private readonly context: Context
   ) { }
@@ -69,6 +72,46 @@ export class PostRepository implements AddPostRepository {
         }
       }
     })
+
+    return postFormatter(post)
+  }
+
+  async find(params: FindPostRepository.Params): Promise<FindPostRepository.Result> {
+    const post = await this.context.prisma.post.findUnique({
+      where: { id: +params.id },
+      select: {
+        id: true,
+        title: true,
+        syntax: true,
+        version: true,
+        description: true,
+        postDate: true,
+        fkApplication: {
+          select: {
+            id: true,
+            description: true,
+          }
+        },
+        fkPlatform: {
+          select: {
+            id: true,
+            description: true
+          }
+        },
+        postHasPostClassification: {
+          select: {
+            fkPostClassification: {
+              select: {
+                id: true,
+                description: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    if (!post) return
 
     return postFormatter(post)
   }
