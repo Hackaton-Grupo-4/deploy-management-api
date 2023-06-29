@@ -11,9 +11,84 @@ datasource db {
 model User {
   id   Int    @id @default(autoincrement())
   name String
+  role String
+
+  post Post[]
+
+  @@map("user")
 }
 
 model Errors {
   id          Int    @id @default(autoincrement())
   description String
+
+  @@map("erros")
+}
+
+model Aplication {
+  id          Int      @id @default(autoincrement())
+  description String
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  post Post[]
+
+  @@map("aplication")
+}
+
+model Platform {
+  id          Int      @id @default(autoincrement())
+  description String
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  post Post[]
+
+  @@map("platform")
+}
+
+model PostClassification {
+  id          Int      @id @default(autoincrement())
+  description String
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  postHasPostClassification PostHasPostClassification[]
+
+  @@map("post_classification")
+}
+
+model PostHasPostClassification {
+  id                   Int      @id @default(autoincrement())
+  postId               Int      @map("post_id")
+  postClassificationId Int      @map("post_classification_id")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt            DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  fkPost               Post               @relation(fields: [postId], references: [id])
+  fkPostClassification PostClassification @relation(fields: [postClassificationId], references: [id])
+
+  @@map("post_has_post_classification")
+}
+
+model Post {
+  id            Int      @id @default(autoincrement())
+  title         String
+  version       String
+  syntax        String
+  description   String   @db.Text()
+  postDate      DateTime @map("post_date")
+  applicationId Int      @map("application_id")
+  platformId    Int      @map("platform_id")
+  userId        Int      @map("user_id")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  fkApplication Aplication @relation(fields: [applicationId], references: [id])
+  fkPlatform    Platform   @relation(fields: [platformId], references: [id])
+  fkUser        User       @relation(fields: [userId], references: [id])
+
+  postHasPostClassification PostHasPostClassification[]
+
+  @@map("post")
 }
