@@ -6,7 +6,8 @@ export class HistoryRepository implements LoadHistoryRepository {
     private readonly context: Context
   ) {}
     async loadHistory(filters: LoadHistoryRepository.Params): Promise<LoadHistoryRepository.Result> {
-        return await this.context.prisma.post.findMany({
+      const total = await this.context.prisma.post.count()
+        const results = await this.context.prisma.post.findMany({
           include: {
             fkApplication: {
               select: {
@@ -41,5 +42,10 @@ export class HistoryRepository implements LoadHistoryRepository {
           skip: Number(filters.skip) ?? 0,
           take: Number(filters.take) ?? 4
         })
+        return {
+          results,
+          totalCount: total,
+          totalPages: Math.ceil(total / filters.take)
+        }
     }
 }

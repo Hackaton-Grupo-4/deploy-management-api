@@ -9,5 +9,9 @@ export namespace LoadHistory {
         skip: number
         take: number
     }
-    export type Result = PostModel 
+    export type Result = {
+        results: PostModel[]
+        totalCount: number
+        totalPages: number
+    }
 }
