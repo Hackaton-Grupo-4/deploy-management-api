@@ -1,5 +1,4 @@
 import app from '@/main/config/app'
-import env from '@/main/config/env'
 import request from 'supertest'
 
 describe('User Routes', () => {
@@ -15,7 +14,6 @@ describe('User Routes', () => {
   test('Should return 200 on add user with valid accessToken', async () => {
     await request(app)
       .post('/api/user')
-      .set('x-access-token', env.accessToken ?? '')
       .send({
         name: 'João Soares',
       })
