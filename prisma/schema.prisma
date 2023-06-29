@@ -20,7 +20,7 @@ model User {
 
 model Errors {
   id          Int    @id @default(autoincrement())
-  description String
+  description String @db.Text()
 
   @@map("errors")
 }

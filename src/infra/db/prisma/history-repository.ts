@@ -1,5 +1,6 @@
 import { LoadHistoryRepository } from '@/data/protocols/db'
 import { Context } from '@/infra/db/prisma/helpers/context'
+import { postFormatter } from '@/utils'
 
 export class HistoryRepository implements LoadHistoryRepository {
   constructor (
@@ -43,7 +44,7 @@ export class HistoryRepository implements LoadHistoryRepository {
           take: Number(filters.take) ?? 4
         })
         return {
-          results,
+          results: results.map(result => postFormatter(result)),
           totalCount: total,
           totalPages: Math.ceil(total / filters.take)
         }
