@@ -6,6 +6,38 @@ export class HistoryRepository implements LoadHistoryRepository {
     private readonly context: Context
   ) {}
     async loadHistory(): Promise<any> {
-        return await this.context.prisma.post.findMany()
+        return await this.context.prisma.post.findMany({
+          include: {
+            fkApplication: {
+              select: {
+                id: true,
+                description: true
+              }
+            },
+            fkUser: {
+              select: {
+                id: true,
+                name: true,
+                role: true
+              }
+            },
+            fkPlatform: {
+              select: {
+                description: true,
+                id: true
+              }
+            },
+            postHasPostClassification: {
+              select: {
+                fkPostClassification: {
+                  select: {
+                    description: true,
+                    id: true
+                  }
+                }
+              }
+            }
+          }
+        })
     }
 }
