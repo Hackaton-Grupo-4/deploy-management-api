@@ -1,11 +1,12 @@
-import { AddPostRepository, FindPostRepository } from '@/data/protocols/db'
+import { AddPostRepository, DeletePostRepository, FindPostRepository } from '@/data/protocols/db'
 import { FindPost } from '@/domain/usecases'
 import { Context } from '@/infra/db/prisma/helpers/context'
 import { postFormatter } from '@/utils'
 
 export class PostRepository implements
   AddPostRepository,
-  FindPostRepository {
+  FindPostRepository,
+  DeletePostRepository {
   constructor(
     private readonly context: Context
   ) { }
@@ -37,7 +38,7 @@ export class PostRepository implements
         },
         fkUser: {
           connect: {
-            id: 1
+            id: +params.userId
           }
         }
       },
@@ -77,8 +78,8 @@ export class PostRepository implements
   }
 
   async find(params: FindPostRepository.Params): Promise<FindPostRepository.Result> {
-    const post = await this.context.prisma.post.findUnique({
-      where: { id: +params.id },
+    const post = await this.context.prisma.post.findFirst({
+      where: { id: +params.id, active: true },
       select: {
         id: true,
         title: true,
@@ -114,5 +115,21 @@ export class PostRepository implements
     if (!post) return
 
     return postFormatter(post)
+  }
+
+  async delete(params: DeletePostRepository.Params): Promise<DeletePostRepository.Result> {
+    const post = await this.context.prisma.post.update({
+      where: { id: +params.id },
+      data: {
+        active: false
+      },
+      select: {
+        id: true,
+        title: true,
+        active: true
+      }
+    })
+
+    return post
   }
 }

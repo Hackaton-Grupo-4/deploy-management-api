@@ -11,7 +11,7 @@
     "check": "npm-check -u -s",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "dev": "npm run build && docker-compose up",
-    "build": "rimraf dist && tsc -p tsconfig-build.json",
+    "build": "rm -rf dist && tsc -p tsconfig-build.json",
     "watch": "tsc -p tsconfig-build.json -w",
     "stop": "docker-compose down",
     "clean": "docker container prune -f",
@@ -52,6 +52,7 @@
     "rimraf": "^3.0.2",
     "supertest": "^6.2.2",
     "ts-jest": "^27.0.7",
+    "ts-node": "^10.9.1",
     "typescript": "^4.4.4"
   },
   "dependencies": {
