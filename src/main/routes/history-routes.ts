@@ -3,5 +3,5 @@ import { makeHistoryController } from '@/main/factories/controllers'
 import { RequestHandler, Router } from 'express'
 
 export default (router: Router): void => {
-  router.post('/history', adaptRoute(makeHistoryController()) as RequestHandler)
+  router.get('/history', adaptRoute(makeHistoryController()) as RequestHandler)
 }
