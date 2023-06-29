@@ -1,7 +1,17 @@
+import { PostModel } from "../models"
+
 export interface LoadHistory {
-    load: () => Promise<LoadHistory.Result>
+    load: (filters: LoadHistory.Params) => Promise<LoadHistory.Result>
 }
 
 export namespace LoadHistory {
-    export type Result = any //Todo: implement Post type
+    export type Params = {
+        skip: number
+        take: number
+    }
+    export type Result = {
+        results: PostModel[]
+        totalCount: number
+        totalPages: number
+    }
 }
