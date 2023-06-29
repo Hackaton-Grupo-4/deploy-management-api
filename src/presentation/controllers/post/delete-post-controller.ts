@@ -1,20 +1,20 @@
-import { FindPost } from '@/domain/usecases'
+import { DeletePost } from '@/domain/usecases'
 import { NotFoundError } from '@/presentation/erros'
-import { badRequest, notFound, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, notFound, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
-export class FindPostController implements Controller {
+export class DeletePostController implements Controller {
   constructor(
-    private readonly findPost: FindPost,
+    private readonly deletePost: DeletePost,
     private readonly validation: Validation
   ) { }
 
-  async handle(request: FindPostController.Request): Promise<HttpResponse> {
+  async handle(request: DeletePostController.Request): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(request.params)
       if (error) return badRequest(error)
 
-      const post = await this.findPost.find({ id: request.params.id })
+      const post = await this.deletePost.delete({ id: request.params.id })
 
       if (!post) return notFound(new NotFoundError('Post'))
 
@@ -25,7 +25,7 @@ export class FindPostController implements Controller {
   }
 }
 
-export namespace FindPostController {
+export namespace DeletePostController {
   export type Request = {
     params: {
       id: number,

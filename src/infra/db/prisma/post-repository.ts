@@ -1,12 +1,13 @@
-import { AddPostRepository, FindPostRepository, UpdatePostRepository } from '@/data/protocols/db'
-import { UpdatePost } from '@/domain/usecases'
+import { AddPostRepository, DeletePostRepository, FindPostRepository, UpdatePostRepository } from '@/data/protocols/db'
+import { FindPost, UpdatePost } from '@/domain/usecases'
 import { Context } from '@/infra/db/prisma/helpers/context'
 import { postFormatter } from '@/utils'
 
 export class PostRepository implements
   AddPostRepository,
   FindPostRepository,
-  UpdatePostRepository {
+  UpdatePostRepository, 
+  DeletePostRepository {
   constructor(
     private readonly context: Context
   ) { }
@@ -105,7 +106,7 @@ export class PostRepository implements
         },
         fkUser: {
           connect: {
-            id: 1
+            id: +params.userId
           }
         }
       },
@@ -145,8 +146,8 @@ export class PostRepository implements
   }
 
   async find(params: FindPostRepository.Params): Promise<FindPostRepository.Result> {
-    const post = await this.context.prisma.post.findUnique({
-      where: { id: +params.id },
+    const post = await this.context.prisma.post.findFirst({
+      where: { id: +params.id, active: true },
       select: {
         id: true,
         title: true,
@@ -182,5 +183,21 @@ export class PostRepository implements
     if (!post) return
 
     return postFormatter(post)
+  }
+
+  async delete(params: DeletePostRepository.Params): Promise<DeletePostRepository.Result> {
+    const post = await this.context.prisma.post.update({
+      where: { id: +params.id },
+      data: {
+        active: false
+      },
+      select: {
+        id: true,
+        title: true,
+        active: true
+      }
+    })
+
+    return post
   }
 }
