@@ -13,6 +13,7 @@ export type PostModel = {
   platformId: number
   postClassificationId: number[]
   userId: number
+  active?: boolean
 }
 
 export interface PostSelect extends Partial<PostModel> {

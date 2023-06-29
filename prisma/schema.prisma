@@ -81,6 +81,7 @@ model Post {
   applicationId Int      @map("application_id")
   platformId    Int      @map("platform_id")
   userId        Int      @map("user_id")
+  active        Boolean  @default(true)
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
 
