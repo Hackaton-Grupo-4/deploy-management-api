@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "start": "node dist/main/server.js",
     "check": "npm-check -u -s",
@@ -13,8 +16,9 @@
     "stop": "docker-compose down",
     "clean": "docker container prune -f",
     "clean:volumes": "docker volume prune -f",
-    "migration:run": "docker exec -it deploy-management-api prisma migrate deploy && npm run db:generate",
-    "migration:generate": "docker exec -it deploy-management-api prisma migrate dev --create-only --name",
+    "migration:run": "prisma migrate deploy && npm run db:generate",
+    "migration:generate": "prisma migrate dev --create-only --name",
+    "db:seed": "prisma db seed",
     "db:generate": "prisma generate",
     "test": "jest --passWithNoTests --silent --noStackTrace --no-cache --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
