@@ -9,7 +9,8 @@ export class HistoryController implements Controller {
 
   async handle (request: HistoryController.Request): Promise<HttpResponse> {
     try {
-      const history = await this.loadHistory.load()
+      const { skip, take } = request
+      const history = await this.loadHistory.load({skip, take})
       return ok(history)
     } catch (error) {
       return serverError(error)

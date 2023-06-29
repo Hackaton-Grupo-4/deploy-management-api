@@ -5,7 +5,7 @@ export class DbLoadHistory implements LoadHistory {
   constructor(
     private readonly loadHistoryRepository: LoadHistoryRepository
   ) {}
-    async load (): Promise<any> {
-        return await this.loadHistoryRepository.loadHistory()
+    async load (filters: LoadHistory.Params): Promise<LoadHistory.Result> {
+        return await this.loadHistoryRepository.loadHistory(filters)
     }
 }
