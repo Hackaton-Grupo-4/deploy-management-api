@@ -41,7 +41,15 @@ export class HistoryRepository implements LoadHistoryRepository {
             }
           },
           skip: Number(filters.skip) ?? 0,
-          take: Number(filters.take) ?? 4
+          take: Number(filters.take) ?? 4,
+          where: {
+            applicationId: {
+              in: filters.application?.split(',')?.map(application => Number(application)) ?? undefined
+            },
+            platformId: {
+              in: filters.platform?.split(',')?.map(platform => Number(platform)) ?? undefined
+            }
+          }
         })
         return {
           results: results.map(result => postFormatter(result)),

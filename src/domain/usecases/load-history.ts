@@ -8,6 +8,8 @@ export namespace LoadHistory {
     export type Params = {
         skip: number
         take: number
+        application?: string
+        platform?: string
     }
     export type Result = {
         results: PostModel[]
