@@ -1,15 +1,83 @@
-import { AddPostRepository, DeletePostRepository, FindPostRepository } from '@/data/protocols/db'
-import { FindPost } from '@/domain/usecases'
+import { AddPostRepository, DeletePostRepository, FindPostRepository, UpdatePostRepository } from '@/data/protocols/db'
+import { FindPost, UpdatePost } from '@/domain/usecases'
 import { Context } from '@/infra/db/prisma/helpers/context'
 import { postFormatter } from '@/utils'
 
 export class PostRepository implements
   AddPostRepository,
   FindPostRepository,
+  UpdatePostRepository, 
   DeletePostRepository {
   constructor(
     private readonly context: Context
   ) { }
+  async update(postData: UpdatePost.Params, postId: number): Promise<UpdatePostRepository.Result> {
+    const post = await this.context.prisma.post.update({
+      data: {
+        description: postData.description ?? undefined,
+        syntax: postData.syntax ?? undefined,
+        title: postData.title ?? undefined,
+        version: postData.version ?? undefined,
+        postDate: new Date(postData.postDate) ?? undefined,
+        fkApplication: {
+          connect: {
+            id: postData?.applicationId ?? undefined
+          }
+        },
+        fkPlatform: {
+          connect: {
+            id: postData?.platformId ?? undefined
+          }
+        },
+        postHasPostClassification: {
+          createMany: {
+            data: postData.postClassificationId.map(id => ({
+              postClassificationId: id
+            }))
+          }
+        },
+        fkUser: {
+          connect: {
+            id: Number(postData.userId)
+          }
+        }
+      },
+      select: {
+        id: true,
+        title: true,
+        version: true,
+        syntax: true,
+        description: true,
+        postDate: true,
+        fkApplication: {
+          select: {
+            id: true,
+            description: true
+          }
+        },
+        fkPlatform: {
+          select: {
+            id: true,
+            description: true
+          }
+        },
+        postHasPostClassification: {
+          select: {
+            fkPostClassification: {
+              select: {
+                id: true,
+                description: true
+              }
+            }
+          }
+        }
+      },
+      where: {
+        id: Number(postId)
+      }
+    })
+    return postFormatter(post)
+  }
 
   async add(params: AddPostRepository.Params): Promise<AddPostRepository.Result> {
     const post = await this.context.prisma.post.create({
