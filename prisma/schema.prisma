@@ -22,7 +22,7 @@ model Errors {
   id          Int    @id @default(autoincrement())
   description String
 
-  @@map("erros")
+  @@map("errors")
 }
 
 model Aplication {
