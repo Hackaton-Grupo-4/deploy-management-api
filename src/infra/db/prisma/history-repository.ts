@@ -8,10 +8,4 @@ export class HistoryRepository implements LoadHistoryRepository {
     async loadHistory(): Promise<any> {
         return await this.context.prisma.post.findMany()
     }
-
-  async logError (stack: string): Promise<void> {
-    await this.context.prisma.errors.create({
-      data: { description: stack }
-    })
-  }
 }
