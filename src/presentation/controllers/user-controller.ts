@@ -14,10 +14,10 @@ export class UserController implements Controller {
       const error = this.validation.validate(request)
       if (error) return badRequest(error)
 
-      const { name } = request
+      const { name, role } = request
 
       const user = await this.addUser.add({
-        name
+        name, role
       })
 
       return ok(user)

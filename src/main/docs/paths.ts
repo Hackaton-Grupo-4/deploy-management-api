@@ -1,5 +1,6 @@
-import { userPath } from './paths/'
+import { historyPath, userPath } from './paths/'
 
 export default {
-  '/user': userPath
+  '/user': userPath,
+  '/history': historyPath
 }
