@@ -4,12 +4,12 @@ import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-he
 import { Controller, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class UserController implements Controller {
-  constructor (
+  constructor(
     private readonly addUser: AddUser,
     private readonly validation: Validation
-  ) {}
+  ) { }
 
-  async handle (request: UserController.Request): Promise<HttpResponse> {
+  async handle(request: UserController.Request): Promise<HttpResponse> {
     try {
       const error = this.validation.validate(request)
       if (error) return badRequest(error)
