@@ -1,6 +1,6 @@
 import { HistoryController } from '@/presentation/controllers'
 import { ServerError } from '@/presentation/erros'
-import { serverError } from '@/presentation/helpers/http/http-helper'
+import { ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { LoadHistorySpy } from '../../data/mocks'
 
 type SutTypes = {
@@ -25,4 +25,9 @@ describe('History Controller', () => {
     expect(httpResponse).toEqual(serverError(new ServerError()))
   })
 
+  test('Should return 200 if success', async () => {
+    const { sut, loadHistorySpy } = mockSut()
+    const httpResponse = await sut.handle(null)
+    expect(httpResponse).toEqual(ok(loadHistorySpy.result))
+  })
 })
